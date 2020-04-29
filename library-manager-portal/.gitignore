@@ -1,0 +1,19 @@
+/bin
+target/
+/node_modules
+/node
+
+
+# NodeJS and Vaadin specific files
+webpack.generated.js
+webpack.config.js
+package.json
+tsconfig.json
+
+# IDEA
+.idea
+*.iml
+
+# local Spring configuration files
+*-local.yaml
+*-local.properties

@@ -1,0 +1,9 @@
+
+logging:
+  level:
+    org.eshishkin: DEBUG
+
+couchdb:
+  url: http://localhost:5984
+  user: admin
+  password: password
