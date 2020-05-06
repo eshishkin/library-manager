@@ -11,8 +11,8 @@ import com.vaadin.flow.data.binder.ReadOnlyHasValue;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
-import org.eshishkin.edu.librarymanager.portal.external.UserRepository;
 import org.eshishkin.edu.librarymanager.portal.model.User;
+import org.eshishkin.edu.librarymanager.portal.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public final class ReaderView extends Div implements HasUrlParameter<String> {
     private static final Logger LOG = LoggerFactory.getLogger(ReaderView.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     private final Binder<User> binder = new Binder<>(User.class);
 
@@ -54,7 +54,7 @@ public final class ReaderView extends Div implements HasUrlParameter<String> {
 
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
-        User user = userRepository.getUser(parameter).block();
+        User user = userService.getUser(parameter).block();
         LOG.info("Parameter {}", parameter);
         LOG.info("ReaderView {}", this.hashCode());
         binder.readBean(user);
