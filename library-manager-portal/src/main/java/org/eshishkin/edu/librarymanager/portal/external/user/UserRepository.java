@@ -1,25 +1,27 @@
-package org.eshishkin.edu.librarymanager.portal.external;
+package org.eshishkin.edu.librarymanager.portal.external.user;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.eshishkin.edu.librarymanager.portal.exception.ResourceNotFoundException;
+import org.eshishkin.edu.librarymanager.portal.external.user.model.SearchRequest;
 import org.eshishkin.edu.librarymanager.portal.model.User;
 import org.eshishkin.edu.librarymanager.portal.model.user.UserSearchResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @AllArgsConstructor
 public class UserRepository {
-    private WebClient webClient;
+    private final WebClient webClient;
 
-    public Mono<List<User>> getUsers() {
-        String request = "{\"selector\": {}}";
+    public Mono<List<User>> getUsers(SearchRequest request) {
         return webClient
                 .post()
                 .uri("/users/_find")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
+                .body(BodyInserters.fromValue(request))
                 .retrieve()
                 .bodyToMono(UserSearchResponse.class)
                 .map(UserSearchResponse::getDocs);
@@ -30,6 +32,10 @@ public class UserRepository {
                 .get()
                 .uri("/users/{userId}", id)
                 .retrieve()
+                .onStatus(
+                        NOT_FOUND::equals,
+                        r -> Mono.error(new ResourceNotFoundException("Resource not found: " + id))
+                )
                 .bodyToMono(User.class);
     }
 

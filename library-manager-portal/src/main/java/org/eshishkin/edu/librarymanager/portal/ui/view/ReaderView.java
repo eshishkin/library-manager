@@ -54,7 +54,7 @@ public final class ReaderView extends Div implements HasUrlParameter<String> {
 
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
-        User user = userService.getUser(parameter).block();
+        User user = userService.getUser(parameter);
         LOG.info("Parameter {}", parameter);
         LOG.info("ReaderView {}", this.hashCode());
         binder.readBean(user);

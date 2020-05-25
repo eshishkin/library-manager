@@ -8,15 +8,15 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import javax.annotation.PostConstruct;
-import org.eshishkin.edu.librarymanager.portal.external.UserRepository;
 import org.eshishkin.edu.librarymanager.portal.model.User;
+import org.eshishkin.edu.librarymanager.portal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("readers")
 public final class ReaderListView extends Div {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userRepository;
 
     @PostConstruct
     public void init() {
@@ -24,7 +24,7 @@ public final class ReaderListView extends Div {
         layout.setSizeFull();
 
         Grid<User> users = createTable();
-        users.setDataProvider(new ListDataProvider<>(userRepository.getUsers().block()));
+        users.setDataProvider(new ListDataProvider<>(userRepository.search()));
 
         layout.add(new Label("Readers"));
         layout.add(users);
